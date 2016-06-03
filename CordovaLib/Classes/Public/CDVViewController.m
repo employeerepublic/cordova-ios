@@ -148,13 +148,13 @@
         }
         path = absolutePath;
     }
-    
+
     // Assert file exists
     if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
         NSAssert(NO, @"ERROR: %@ does not exist. Please run cordova-ios/bin/cordova_plist_to_config_xml path/to/project.", path);
         return nil;
     }
-    
+
     return path;
 }
 
@@ -162,7 +162,7 @@
 {
     // read from config.xml in the app bundle
     NSString* path = [self configFilePath];
-    
+
     NSURL* url = [NSURL fileURLWithPath:path];
 
     self.configParser = [[NSXMLParser alloc] initWithContentsOfURL:url];
@@ -269,7 +269,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     // Load settings
     [self loadSettings];
 
@@ -280,7 +280,7 @@
         backupWebStorageType = backupWebStorage;
     }
     [self.settings setCordovaSetting:backupWebStorageType forKey:@"BackupWebStorage"];
-    
+
     [CDVLocalStorage __fixupDatabaseLocationsWithBackupType:backupWebStorageType];
 
     // // Instantiate the WebView ///////////////
@@ -625,7 +625,11 @@
 - (void)onAppWillEnterForeground:(NSNotification*)notification
 {
     // NSLog(@"%@",@"applicationWillEnterForeground");
-    [self.commandDelegate evalJs:@"cordova.fireDocumentEvent('resume');"];
+
+    BOOL reloaded = self.webViewEngine.reloadIfRequired;
+    if (!reloaded) {
+        [self.commandDelegate evalJs:@"cordova.fireDocumentEvent('resume');"];
+    }
 
     /** Clipboard fix **/
     UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];

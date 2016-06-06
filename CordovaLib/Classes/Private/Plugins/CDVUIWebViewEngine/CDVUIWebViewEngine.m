@@ -65,6 +65,12 @@
     [self updateSettings:self.commandDelegate.settings];
 }
 
+- (BOOL)reloadIfRequired
+{
+    NSLog(@"%@", @"CDVUIWebViewEngine reloadIfRequired");
+    return NO;
+}
+
 - (void)evaluateJavaScript:(NSString*)javaScriptString completionHandler:(void (^)(id, NSError*))completionHandler
 {
     NSString* ret = [(UIWebView*)_engineWebView stringByEvaluatingJavaScriptFromString:javaScriptString];
